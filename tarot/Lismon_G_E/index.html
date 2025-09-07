@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lismon Grand Etteilla</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .image-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        img {
+            width: 30vw; /* 화면 너비의 30% 크기로 설정 */
+            max-width: 250px; /* 너무 커지지 않도록 제한 */
+            height: auto; /* 원본 비율 유지 */
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        @media (max-width: 600px) {
+            img {
+                width: 25vw; /* 작은 화면에서는 더 작게 표시 */
+            }
+        }
+        #questionBox {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 90%;
+            max-width: 400px;
+            height: 40px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #90EE90;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #77dd77;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lismon Grand Etteilla</h1>
+
+    <div id="questionBox">
+        <input type="text" id="question" placeholder="질문을 입력해 주세요">
+    </div>
+
+    <button onclick="drawImages()">카드 뽑기</button>
+
+    <div id="images" class="image-container"></div>
+
+    <div class="footer">
+        ✨ 제작: 연유🌱
+    </div>
+
+    <script>
+        const imagePaths = Array.from({ length: 78 }, (_, i) =>
+  `cards/${i.toString().padStart(2, '0')}.jpg`
+);
+        function drawImages() {
+            const selectedImages = getRandomImages(3);
+            displayImages(selectedImages);
+        }
+
+        function getRandomImages(num) {
+            let selected = [];
+            let copy = [...imagePaths];
+
+            for (let i = 0; i < num; i++) {
+                const randomIndex = Math.floor(Math.random() * copy.length);
+                selected.push(copy.splice(randomIndex, 1)[0]);
+            }
+
+            return selected;
+        }
+
+        function applyImageRotation(imgElement) {
+            if (Math.random() > 0.5) {
+                imgElement.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function displayImages(images) {
+            const imagesDiv = document.getElementById('images');
+            imagesDiv.innerHTML = '';
+
+            images.forEach(image => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+                imagesDiv.appendChild(imgElement);
+                applyImageRotation(imgElement);
+            });
+        }
+    </script>
+</body>
+</html>
+
+

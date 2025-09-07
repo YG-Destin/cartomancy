@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>64괘 랜덤 뽑기</title>
+  <style>
+    body {
+      font-family: "Noto Sans KR", sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+    label, input[type="text"], button, ul {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      max-width: 500px;
+      padding: 8px 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button {
+      font-size: 16px;
+      padding: 12px 25px;
+      cursor: pointer;
+      background-color: #4ea8f7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      margin: auto;
+      display: block;
+    }
+    button:hover {
+      background-color: #3a8de0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+    }
+    .guaItem {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      background: #f9f9f9;
+      min-width: 120px;
+      text-align: center;
+    }
+    .guaTitle {
+      font-weight: bold;
+      margin-bottom: 10px;
+      background: #d0e8ff;
+      padding: 0px;
+      border-radius: 0px;
+    }
+    .symbols {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 50px;
+      line-height: 15px;
+      user-select: none;
+    }
+  .symbols div {
+  font-size: 125px;    /* 글자 크기 키움 */
+  line-height: 10px;  /* 줄 높이도 늘림 */
+  width: 250px;        /* 가로 길이 고정 */
+  margin: 0 auto;     /* 가운데 정렬 */
+}
+  </style>
+</head>
+<body>
+  <h1>주역 뽑기</h1>
+
+  <label for="questionInput">무엇이 알고 싶나요?</label>
+  <input type="text" id="questionInput" placeholder="질문을 입력하세요." />
+
+  <button id="drawBtn">주역 뽑기</button>
+
+  <ul id="guaList"></ul>
+
+  <script>
+    const gua64 = [
+      { number: 1, name: "중천건", symbols: ["⚊", "⚊", "⚊", "⚊", "⚊", "⚊"] },
+      { number: 2, name: "중지곤", symbols: ["⚋", "⚋", "⚋", "⚋", "⚋", "⚋"] },
+      { number: 3, name: "수뢰둔", symbols: ["⚋", "⚊", "⚋", "⚋", "⚋", "⚊"] },    
+      { number: 4, name: "산수몽", symbols: ["⚊", "⚋", "⚋", "⚋", "⚊", "⚋"] },    
+      { number: 5, name: "수천수", symbols: ["⚋", "⚊", "⚋", "⚊", "⚊", "⚊"] },    
+      { number: 6, name: "천수송", symbols: ["⚊", "⚊", "⚊", "⚋", "⚊", "⚋"] },    
+      { number: 7, name: "지수사", symbols: ["⚋", "⚋", "⚋", "⚋", "⚊", "⚋"] },    
+      { number: 8, name: "수지비", symbols: ["⚋", "⚊", "⚋", "⚋", "⚋", "⚋"] },    
+      { number: 9, name: "풍천소축", symbols: ["⚊", "⚊", "⚋", "⚊", "⚊", "⚊"] },    
+      { number: 10, name: "천택리", symbols: ["⚊", "⚊", "⚊", "⚋", "⚊", "⚊"] },    
+      { number: 11, name: "지천태", symbols: ["⚋", "⚋", "⚋", "⚊", "⚊", "⚊"] },    
+      { number: 12, name: "천지비", symbols: ["⚊", "⚊", "⚊", "⚋", "⚋", "⚋"] },    
+      { number: 13, name: "천화동인", symbols: ["⚊", "⚊", "⚊", "⚊", "⚋", "⚊"] },   
+      { number: 14, name: "화천대유", symbols: ["⚊", "⚋", "⚊", "⚊", "⚊", "⚊"] },     
+      { number: 15, name: "지산겸", symbols: ["⚋", "⚋", "⚋", "⚊", "⚋", "⚋"] },      
+      { number: 16, name: "뇌지예", symbols: ["⚋", "⚋", "⚊", "⚋", "⚋", "⚋"] },     
+      { number: 17, name: "택뢰수", symbols: ["⚋", "⚊", "⚊", "⚋", "⚋", "⚊"] },       
+      { number: 18, name: "산풍고", symbols: ["⚊", "⚋", "⚋", "⚊", "⚊", "⚋"] },        
+      { number: 19, name: "지택림", symbols: ["⚋", "⚋", "⚋", "⚋", "⚊", "⚊"] },       
+      { number: 20, name: "풍지관", symbols: ["⚊", "⚊", "⚋", "⚋", "⚋", "⚋"] },         
+      { number: 21, name: "화뢰서합", symbols: ["⚊", "⚋", "⚊", "⚋", "⚋", "⚊"] },       
+      { number: 22, name: "산화비", symbols: ["⚊", "⚋", "⚋", "⚊", "⚋", "⚊"] },      
+      { number: 23, name: "산지박", symbols: ["⚊", "⚋", "⚋", "⚋", "⚋", "⚋"] },       
+      { number: 24, name: "지뢰복", symbols: ["⚋", "⚋", "⚋", "⚋", "⚋", "⚊"] },        
+      { number: 25, name: "천뢰무망", symbols: ["⚊", "⚊", "⚊", "⚋", "⚋", "⚊"] },     
+      { number: 26, name: "산천대축", symbols: ["⚊", "⚋", "⚋", "⚊", "⚊", "⚊"] },     
+      { number: 27, name: "산뢰이", symbols: ["⚊", "⚋", "⚋", "⚋", "⚋", "⚊"] },       
+      { number: 28, name: "택풍대과", symbols: ["⚋", "⚊", "⚊", "⚊", "⚊", "⚋"] },     
+      { number: 29, name: "중수감", symbols: ["⚋", "⚊", "⚋", "⚋", "⚊", "⚋"] },     
+      { number: 30, name: "중화리", symbols: ["⚊", "⚋", "⚊", "⚊", "⚋", "⚊"] },     
+      { number: 31, name: "택산함", symbols: ["⚋", "⚊", "⚊", "⚊", "⚋", "⚋"] },    
+      { number: 32, name: "뇌풍항", symbols: ["⚋", "⚋", "⚊", "⚊", "⚊", "⚋"] },    
+      { number: 33, name: "천산돈", symbols: ["⚊", "⚊", "⚊", "⚊", "⚋", "⚋"] },     
+      { number: 34, name: "뇌천대장", symbols: ["⚋", "⚋", "⚊", "⚊", "⚊", "⚊"] },      
+      { number: 35, name: "화지진", symbols: ["⚊", "⚋", "⚊", "⚋", "⚋", "⚋"] },     
+      { number: 36, name: "지화명", symbols: ["⚋", "⚋", "⚋", "⚊", "⚋", "⚊"] },     
+      { number: 37, name: "풍화가인", symbols: ["⚊", "⚊", "⚋", "⚊", "⚋", "⚊"] },      
+      { number: 38, name: "화택규", symbols: ["⚊", "⚋", "⚊", "⚋", "⚊", "⚊"] },     
+      { number: 39, name: "수산건", symbols: ["⚋", "⚊", "⚋", "⚊", "⚋", "⚋"] },     
+      { number: 40, name: "뇌수해", symbols: ["⚋", "⚋", "⚊", "⚋", "⚊", "⚋"] },     
+      { number: 41, name: "산택손", symbols: ["⚊", "⚋", "⚋", "⚋", "⚊", "⚊"] },
+      { number: 42, name: "풍뢰익", symbols: ["⚊", "⚊", "⚋", "⚋", "⚋", "⚊"] },
+      { number: 43, name: "택천쾌", symbols: ["⚋", "⚊", "⚊", "⚊", "⚊", "⚊"] },
+      { number: 44, name: "천풍구", symbols: ["⚊", "⚊", "⚊", "⚊", "⚊", "⚋"] },
+      { number: 45, name: "택지췌", symbols: ["⚋", "⚊", "⚊", "⚋", "⚋", "⚋"] },
+      { number: 46, name: "지풍승", symbols: ["⚋", "⚋", "⚋", "⚊", "⚊", "⚋"] },
+      { number: 47, name: "택수곤", symbols: ["⚋", "⚊", "⚊", "⚋", "⚊", "⚋"] },
+      { number: 48, name: "수풍정", symbols: ["⚋", "⚊", "⚋", "⚊", "⚊", "⚋"] },
+      { number: 49, name: "택화혁", symbols: ["⚋", "⚊", "⚊", "⚊", "⚋", "⚊"] },
+      { number: 50, name: "화풍정", symbols: ["⚊", "⚋", "⚊", "⚊", "⚊", "⚋"] },
+      { number: 51, name: "중뢰진", symbols: ["⚋", "⚋", "⚊", "⚋", "⚋", "⚊"] },
+      { number: 52, name: "중산간", symbols: ["⚊", "⚋", "⚋", "⚊", "⚋", "⚋"] },
+      { number: 53, name: "풍산점", symbols: ["⚊", "⚊", "⚋", "⚊", "⚋", "⚋"] },
+      { number: 54, name: "뇌택귀매", symbols: ["⚋", "⚋", "⚊", "⚋", "⚊", "⚊"] },
+      { number: 55, name: "뇌화풍", symbols: ["⚋", "⚋", "⚊", "⚊", "⚋", "⚊"] },
+      { number: 56, name: "화산려", symbols: ["⚊", "⚋", "⚊", "⚊", "⚋", "⚋"] },
+      { number: 57, name: "중풍손", symbols: ["⚊", "⚊", "⚋", "⚊", "⚊", "⚋"] },
+      { number: 58, name: "중택태", symbols: ["⚋", "⚊", "⚊", "⚋", "⚊", "⚊"] },
+      { number: 59, name: "풍수환", symbols: ["⚊", "⚊", "⚋", "⚋", "⚊", "⚋"] },
+      { number: 60, name: "수택절", symbols: ["⚋", "⚊", "⚋", "⚋", "⚊", "⚊"] },
+      { number: 61, name: "풍택중부", symbols: ["⚊", "⚊", "⚋", "⚋", "⚊", "⚊"] },
+      { number: 62, name: "뇌산소과", symbols: ["⚋", "⚋", "⚊", "⚊", "⚋", "⚋"] },
+      { number: 63, name: "수화기제", symbols: ["⚋", "⚊", "⚋", "⚊", "⚋", "⚊"] },
+      { number: 64, name: "화수미제", symbols: ["⚊", "⚋", "⚊", "⚋", "⚊", "⚋"] }
+    ];
+
+    const drawBtn = document.getElementById("drawBtn");
+    const guaListEl = document.getElementById("guaList");
+    const questionInput = document.getElementById("questionInput");
+
+    drawBtn.addEventListener("click", () => {
+      guaListEl.innerHTML = "";
+
+      const question = questionInput.value.trim();
+
+      if (gua64.length < 2) {
+        guaListEl.innerHTML = "<li>괘가 2개 이상 있어야 합니다.</li>";
+        return;
+      }
+
+      // 중복 없이 2개 괘 뽑기
+      const indices = new Set();
+      while (indices.size < 2) {
+        const idx = Math.floor(Math.random() * gua64.length);
+        indices.add(idx);
+      }
+
+      // 질문 출력
+      if (question) {
+        const questionLi = document.createElement("li");
+        questionLi.style.fontWeight = "bold";
+        questionLi.style.background = "#d0e8ff";
+        questionLi.style.padding = "10px";
+        questionLi.style.borderRadius = "5px";
+        questionLi.textContent = `질문: ${question}`;
+        guaListEl.appendChild(questionLi);
+      }
+
+      // 괘 2개 출력
+      indices.forEach(i => {
+        const gua = gua64[i];
+        const guaDiv = document.createElement("li");
+        guaDiv.className = "guaItem";
+
+        const title = document.createElement("div");
+        title.className = "guaTitle";
+        title.textContent = `${gua.number}번 ${gua.name}`;
+        guaDiv.appendChild(title);
+
+        const symbolsDiv = document.createElement("div");
+        symbolsDiv.className = "symbols";
+
+        gua.symbols.forEach(symbol => {
+          const line = document.createElement("div");
+          line.textContent = symbol;
+          symbolsDiv.appendChild(line);
+        });
+
+        guaDiv.appendChild(symbolsDiv);
+        guaListEl.appendChild(guaDiv);
+      });
+    });
+  </script>
+  
+    <div class="footer">
+        <p>✨ 제작: 연유🌱</p>
+    </div>
+  
+</body>
+</html>

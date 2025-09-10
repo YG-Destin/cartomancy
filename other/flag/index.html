@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>오방색 뽑기</title>
+  <title>오방점 뽑기</title>
   <style>
     body {
       background-color: #fff9e6;
@@ -60,8 +60,8 @@
     }
 
     .dice {
-      width: 50px;
-      height: 50px;
+      width: 100px;
+      min-height: 50px;
       border: 2px solid black;
       border-radius: 10px;
       display: flex;
@@ -69,6 +69,10 @@
       justify-content: center;
       font-size: 14px;
       font-weight: bold;
+      padding: 6px;
+      cursor: pointer;
+      flex-direction: column;
+      white-space: normal;
       animation: popUp 0.4s ease-out;
     }
 
@@ -86,7 +90,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>오방색 뽑기</h1>
+    <h1>오방점 뽑기</h1>
 
     <div class="question-box">
       <input type="text" id="question" placeholder="질문을 입력하세요" />
@@ -101,24 +105,71 @@
 
   <script>
     const colors = [
-      { name: '흰색', code: 'white', text: 'black' },
-      { name: '빨간색', code: 'red', text: 'white' },
-      { name: '초록색', code: 'green', text: 'white' },
-      { name: '파란색', code: 'blue', text: 'white' },
-      { name: '노란색', code: 'yellow', text: 'black' }
+      { name: '흰색', code: 'white', text: 'black', attr: '金',
+        positive: ['결단','규율','지혜','정의','명확함'],
+        negative: ['냉정','단절','엄격','차가움','완고함']
+      },
+      { name: '빨간색', code: 'red', text: 'white', attr: '火',
+        positive: ['열정','명예','표현','활력','추진력'],
+        negative: ['파괴','분노','소모','성급함','무모함']
+      },
+      { name: '초록색', code: 'green', text: 'white', attr: '水',
+        positive: ['지혜','유연','소통','직관','적응'],
+        negative: ['불안','산만','은폐','혼란','우유부단']
+      },
+      { name: '파란색', code: 'blue', text: 'white', attr: '木',
+        positive: ['성장','창의','도덕','확장','협력'],
+        negative: ['고집','충돌','불안정','초조','갈등']
+      },
+      { name: '노란색', code: 'yellow', text: 'black', attr: '土',
+        positive: ['안정','책임','현실','신뢰','인내'],
+        negative: ['집착','고립','답답함','우유부단','권위주의']
+      }
     ];
 
     function drawColors() {
-      const shuffled = colors.sort(() => 0.5 - Math.random());
+      // 무작위 두 개 뽑기
+      const shuffled = [...colors].sort(() => 0.5 - Math.random());
       const selected = shuffled.slice(0, 2);
+
       const result = document.getElementById('result');
       result.innerHTML = '';
+
       selected.forEach(c => {
         const div = document.createElement('div');
         div.className = 'dice';
         div.style.backgroundColor = c.code;
         div.style.color = c.text;
         div.innerText = c.name;
+
+        // 클릭 이벤트 (한 번만 작동)
+        div.onclick = () => {
+          if (div.dataset.clicked === "true") return;
+          div.dataset.clicked = "true";
+
+          const isPositive = Math.random() < 0.5;
+          const type = isPositive ? '<긍정>' : '<부정>';
+          const keywords = isPositive ? c.positive : c.negative;
+
+          // 두 개씩 줄바꿈
+          let listText = "";
+          for (let i = 0; i < keywords.length; i += 2) {
+            listText += keywords.slice(i, i+2).join(' · ') + "<br>";
+          }
+
+          div.innerHTML = `
+            <div style="font-size:16px; font-weight:bold; margin-bottom:5px; text-align:center;">
+              ${c.attr}
+            </div>
+            <div style="font-size:10px; margin-bottom:3px; text-align:center;">
+              ${type}
+            </div>
+            <div style="font-size:15px; text-align:center; line-height:1.4;">
+              ${listText}
+            </div>
+          `;
+        };
+
         result.appendChild(div);
       });
     }

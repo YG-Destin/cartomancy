@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>동자신점</title>
+  <style>
+    body {
+      position: relative;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('images/background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.5;
+      z-index: -1;
+    }
+
+    .grid {
+      display: grid;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px;
+      display: none;
+    }
+
+    .card-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .grid img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      max-width: 120px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s ease;
+    }
+
+    .grid img:hover {
+      transform: scale(1.05);
+    }
+
+    .meaning {
+      display: none;
+      margin-top: 5px;
+      padding: 8px 10px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      max-width: 150px;
+      text-align: left;
+    }
+
+    .btn-container { margin-bottom: 20px; }
+
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-1 { background-color: #8ecae6; }
+    .btn-2 { background-color: #219ebc; }
+    .btn-3 { background-color: #023047; }
+    .btn-5 { background-color: #ffb703; color: black; }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+
+    #questionDisplay {
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 50px;
+      font-size: 14px;
+      color: gray;
+      line-height: 1.6;
+    }
+
+    @media (orientation: landscape) {
+      .grid img {
+        max-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>동자신점</h1>
+
+  <input type="text" id="questionInput" placeholder="질문을 입력하세요.">
+
+  <div class="btn-container">
+    <button class="btn-1" onclick="shuffleAndDisplay(1)">1장 뽑기</button>
+    <button class="btn-2" onclick="shuffleAndDisplay(2)">2장 뽑기</button>
+    <button class="btn-3" onclick="shuffleAndDisplay(3)">3장 뽑기</button>
+    <button class="btn-5" onclick="shuffleAndDisplay(5)">5장 뽑기</button>
+  </div>
+
+  <div id="questionDisplay"></div>
+  <div id="cardContainer" class="grid"></div>
+
+  <div class="footer">
+    © 2025 Studio Y.Green. All Rights Reserved.<br>
+    본 페이지의 HTML, CSS, JavaScript 코드는 Studio Y.Green의 창작물로 저작권법의 보호를 받습니다.<br>
+    페이지에 사용된 이미지 및 일러스트의 저작권은 원저작자에게 있습니다.<br>
+    무단 복제, 배포, 코드 변형 및 상업적 이용을 금합니다.<br>
+    <small style="color:#000;">✨ 웹페이지 제작 : 연유🌱, 이미지 제공 : 월홍🌙</small>
+  </div>
+
+  <script>
+    const imagePaths = Array.from({ length: 31 }, (_, i) => `cards/${(i + 1).toString().padStart(2, '0')}.JPG`);
+    const meanings = [
+      "잔 두 개 : 긍정 / 마음이 통함, 축배를 들다, 마음에 듦",
+      "빠른 운석 : 긍정 or 중립 / 쾌속 진행, 상승세, 바쁨, 분주함",
+      "남자 성기 : 부정 or 중립 / (필요 이상으로) 흥분한, 불륜, 잠자리만 원함, (성별로서의) 남자",
+      "졸졸졸 : 중립 / (누군가를) 쫓아다님, 누군가를 따름",
+      "가위 : 부정 or 중립 / 아슬아슬함, 끊어냄, 포기함",
+      "칼싸움 : 부정 / 싸움, 다툼, 기싸움",
+      "물결 : 중립 / 퍼져나가다, 퍼트리다",
+      "교차 : 중립 / 상황 반전, 감정 반전, 뒤바뀜",
+      "해골 : 부정 / 끝, 실패, 파산, 이별",
+      "왕관 : 긍정 / 성공, 부유함",
+      "가득찬 물 : 중립 / 가능성이 매우 높음, 충만함, 가득함",
+      "돈다발 : 긍정 or 중립 / 물질적인 모든 것, 선물",
+      "태양 : 매우 긍정 / 만사형통, 운수대길",
+      "함정 : 부정 / 함정에 빠짐, 일이 더뎌짐, 진행이 안 됨",
+      "마음 : 긍정 / 사랑함, 감정 충만, 마음 교류",
+      "편지 : 긍정 or 중립 / 소식, 연락",
+      "거지 옷 : 부정 / 빈곤함, 어려움",
+      "열쇠 : 긍정 / 해결책이 생김",
+      "반짝반짝 : 긍정 / 소중함, 좋은 기분",
+      "애기 : 중립 / 연하, 동안, 어리다, 철이 없음",
+      "밤 : 중립 or 부정 / 밤, 어둠, (희망은 보이지만) 당장은 어려움",
+      "치켜뜬 눈 : 부정 / 이런 눈을 만든 상황이나 기분을 나타냄",
+      "집 : 중립 / 장소, 집, 부동산, 새로운 곳",
+      "불꽃 : 중립 / 열정, 불같이 타오름",
+      "자물쇠 : 중립 or 부정 / (무언가가) 닫히거나 막힘, 해결책이 필요함",
+      "날벼락 : 중립 or 부정 / 갑작스러운 난관, 급작스러움, 짜증, 다툼",
+      "책과 연필 : 중립 / 공부, 탐구함",
+      "꼬인 선 : 부정 / 상황이 꼬임, 짜증, 언짢음",
+      "동그라미 : 긍정 / 맞다, 참, 된다",
+      "세모 : 중립 / 반반, 애매함, 중간",
+      "가위표 : 부정 / 아니다, 틀리다, 안된다"
+    ];
+
+    function shuffleDeck() {
+      return imagePaths.sort(() => Math.random() - 0.5);
+    }
+
+    function displayCards(numCards) {
+      const question = document.getElementById("questionInput").value.trim();
+      document.getElementById("questionDisplay").innerText = question ? `질문: ${question}` : "";
+
+      const container = document.getElementById("cardContainer");
+      container.innerHTML = "";
+      container.style.display = "grid";
+      container.style.gridTemplateColumns = `repeat(${numCards}, auto)`;
+
+      const selected = shuffleDeck().slice(0, numCards);
+
+      selected.forEach((imgSrc, index) => {
+        const cardBox = document.createElement("div");
+        cardBox.className = "card-box";
+
+        const img = document.createElement("img");
+        img.src = imgSrc;
+        img.dataset.index = index;
+
+        const meaningBox = document.createElement("div");
+        meaningBox.className = "meaning";
+        meaningBox.textContent = meanings[index] || "※ 월홍님이 뜻을 추가할 예정입니다.";
+
+        img.addEventListener("click", () => {
+          meaningBox.style.display =
+            meaningBox.style.display === "block" ? "none" : "block";
+        });
+
+        cardBox.appendChild(img);
+        cardBox.appendChild(meaningBox);
+        container.appendChild(cardBox);
+      });
+    }
+
+    function shuffleAndDisplay(numCards) {
+      displayCards(numCards);
+    }
+  </script>
+
+</body>
+</html>

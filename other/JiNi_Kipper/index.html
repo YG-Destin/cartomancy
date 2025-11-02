@@ -77,8 +77,6 @@
     <!-- 그랑타블로로 돌아가기 버튼을 여기 배치 -->
     <button id="resetButton" class="btn-reset" onclick="restoreOriginalGrid()">그랑타블로로 돌아가기</button>
 
-    <div class="footer">✨ 제작: 연유🌱</div>
-
     <script>
         const imagePaths = Array.from({length: 36}, (_, i) => `cards/${(i + 1).toString().padStart(2, '0')}.jpg`);
         let displayedCards = []; 
@@ -187,6 +185,13 @@
             document.getElementById("resetButton").style.display = "none"; // 원래 배열로 돌아가면 버튼 숨기기
         }
     </script>
+
+    <footer style="font-size:0.9rem; color:#555; text-align:center; margin-top:40px; line-height:1.6;">
+© 2025 Studio Y.Green. All Rights Reserved.<br>
+본 페이지의 HTML, CSS, JavaScript 코드 및 오라클 콘텐츠는 Studio Y.Green의 창작물로 저작권법의 보호를 받습니다.<br>
+무단 복제, 배포, 코드 변형 및 상업적 이용을 금합니다.<br>
+<small style="color:#888;">✨️ 웹페이지 제작 : 연유🌱</small>
+</footer>
 
 </body>
 </html>

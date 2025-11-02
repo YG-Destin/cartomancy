@@ -131,8 +131,9 @@
   </div>
 
   <script>
-    const imagePaths = Array.from({ length: 31 }, (_, i) => `cards/${(i + 1).toString().padStart(2, '0')}.jpg`);
-    const meanings = [
+  const deck = Array.from({ length: 31 }, (_, i) => ({
+    file: `cards/${(i + 1).toString().padStart(2, '0')}.jpg`,
+    meaning: [
       "잔 두 개 : 긍정 / 마음이 통함, 축배를 들다, 마음에 듦",
       "빠른 운석 : 긍정 or 중립 / 쾌속 진행, 상승세, 바쁨, 분주함",
       "남자 성기 : 부정 or 중립 / (필요 이상으로) 흥분한, 불륜, 잠자리만 원함, (성별로서의) 남자",
@@ -164,50 +165,50 @@
       "동그라미 : 긍정 / 맞다, 참, 된다",
       "세모 : 중립 / 반반, 애매함, 중간",
       "가위표 : 부정 / 아니다, 틀리다, 안된다"
-    ];
+    ][i].replace(/\//g, "<br>") // 슬래시를 <br>로 변환
+  }));
 
-    function shuffleDeck() {
-      return imagePaths.sort(() => Math.random() - 0.5);
-    }
+  function shuffleDeck() {
+    return [...deck].sort(() => Math.random() - 0.5);
+  }
 
-    function displayCards(numCards) {
-      const question = document.getElementById("questionInput").value.trim();
-      document.getElementById("questionDisplay").innerText = question ? `질문: ${question}` : "";
+  function displayCards(numCards) {
+    const question = document.getElementById("questionInput").value.trim();
+    document.getElementById("questionDisplay").innerText = question ? `질문: ${question}` : "";
 
-      const container = document.getElementById("cardContainer");
-      container.innerHTML = "";
-      container.style.display = "grid";
-      container.style.gridTemplateColumns = `repeat(${numCards}, auto)`;
+    const container = document.getElementById("cardContainer");
+    container.innerHTML = "";
+    container.style.display = "grid";
+    container.style.gridTemplateColumns = `repeat(${numCards}, auto)`;
 
-      const selected = shuffleDeck().slice(0, numCards);
+    const selected = shuffleDeck().slice(0, numCards);
 
-      selected.forEach((imgSrc, index) => {
-        const cardBox = document.createElement("div");
-        cardBox.className = "card-box";
+    selected.forEach(({ file, meaning }) => {
+      const cardBox = document.createElement("div");
+      cardBox.className = "card-box";
 
-        const img = document.createElement("img");
-        img.src = imgSrc;
-        img.dataset.index = index;
+      const img = document.createElement("img");
+      img.src = file;
 
-        const meaningBox = document.createElement("div");
-        meaningBox.className = "meaning";
-        meaningBox.textContent = meanings[index] ;
+      const meaningBox = document.createElement("div");
+      meaningBox.className = "meaning";
+      meaningBox.innerHTML = meaning;
 
-        img.addEventListener("click", () => {
-          meaningBox.style.display =
-            meaningBox.style.display === "block" ? "none" : "block";
-        });
-
-        cardBox.appendChild(img);
-        cardBox.appendChild(meaningBox);
-        container.appendChild(cardBox);
+      img.addEventListener("click", () => {
+        meaningBox.style.display =
+          meaningBox.style.display === "block" ? "none" : "block";
       });
-    }
 
-    function shuffleAndDisplay(numCards) {
-      displayCards(numCards);
-    }
-  </script>
+      cardBox.appendChild(img);
+      cardBox.appendChild(meaningBox);
+      container.appendChild(cardBox);
+    });
+  }
+
+  function shuffleAndDisplay(numCards) {
+    displayCards(numCards);
+  }
+</script>
 
 </body>
 </html>

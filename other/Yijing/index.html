@@ -7,19 +7,22 @@
   <style>
     body {
       font-family: "Noto Sans KR", sans-serif;
-      max-width: 600px;
+      max-width: 700px;
       margin: auto;
       padding: 20px;
       text-align: center;
     }
+
     label, input[type="text"], button, ul {
       text-align: center;
     }
+
     label {
       display: block;
       margin-bottom: 6px;
       font-weight: bold;
     }
+
     input[type="text"] {
       width: 100%;
       max-width: 500px;
@@ -32,6 +35,7 @@
       margin-left: auto;
       margin-right: auto;
     }
+
     button {
       font-size: 16px;
       padding: 12px 25px;
@@ -44,50 +48,75 @@
       margin: auto;
       display: block;
     }
+
     button:hover {
       background-color: #3a8de0;
     }
+
     ul {
       list-style: none;
       padding: 0;
       margin-top: 20px;
       display: flex;
-      gap: 30px;
+      flex-wrap: wrap;
+      gap: 25px;
       justify-content: center;
     }
+
     .guaItem {
       border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 10px;
+      border-radius: 6px;
+      padding: 15px;
       background: #f9f9f9;
-      min-width: 120px;
-      text-align: center;
+      width: 45%;
+      max-width: 260px;
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
+
+    .guaItem:hover {
+      background: #e6f3ff;
+    }
+
     .guaTitle {
       font-weight: bold;
-      margin-bottom: 10px;
       background: #d0e8ff;
-      padding: 0px;
-      border-radius: 0px;
+      padding: 5px;
+      border-radius: 4px;
+      margin-bottom: 8px;
     }
+
+    .guaKeyword {
+      display: none;
+      font-size: 14px;
+      color: #333;
+      margin-top: 8px;
+      padding: 6px;
+      border-top: 1px solid #ccc;
+    }
+
     .symbols {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      font-size: 50px;
-      line-height: 15px;
+      gap: 8px;
+      font-size: clamp(60px, 8vw, 120px);
+      line-height: 1;
       user-select: none;
+      text-align: center;
+      white-space: nowrap;
     }
-  .symbols div {
-  font-size: 125px;    /* 글자 크기 키움 */
-  line-height: 10px;  /* 줄 높이도 늘림 */
-  width: 250px;        /* 가로 길이 고정 */
-  margin: 0 auto;     /* 가운데 정렬 */
-}
+
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: gray;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
-  <h1>주역 뽑기</h1>
+  <h1>주역 64괘 랜덤 뽑기</h1>
 
   <label for="questionInput">무엇이 알고 싶나요?</label>
   <input type="text" id="questionInput" placeholder="질문을 입력하세요." />
@@ -98,70 +127,70 @@
 
   <script>
     const gua64 = [
-      { number: 1, name: "중천건", symbols: ["⚊", "⚊", "⚊", "⚊", "⚊", "⚊"] },
-      { number: 2, name: "중지곤", symbols: ["⚋", "⚋", "⚋", "⚋", "⚋", "⚋"] },
-      { number: 3, name: "수뢰둔", symbols: ["⚋", "⚊", "⚋", "⚋", "⚋", "⚊"] },    
-      { number: 4, name: "산수몽", symbols: ["⚊", "⚋", "⚋", "⚋", "⚊", "⚋"] },    
-      { number: 5, name: "수천수", symbols: ["⚋", "⚊", "⚋", "⚊", "⚊", "⚊"] },    
-      { number: 6, name: "천수송", symbols: ["⚊", "⚊", "⚊", "⚋", "⚊", "⚋"] },    
-      { number: 7, name: "지수사", symbols: ["⚋", "⚋", "⚋", "⚋", "⚊", "⚋"] },    
-      { number: 8, name: "수지비", symbols: ["⚋", "⚊", "⚋", "⚋", "⚋", "⚋"] },    
-      { number: 9, name: "풍천소축", symbols: ["⚊", "⚊", "⚋", "⚊", "⚊", "⚊"] },    
-      { number: 10, name: "천택리", symbols: ["⚊", "⚊", "⚊", "⚋", "⚊", "⚊"] },    
-      { number: 11, name: "지천태", symbols: ["⚋", "⚋", "⚋", "⚊", "⚊", "⚊"] },    
-      { number: 12, name: "천지비", symbols: ["⚊", "⚊", "⚊", "⚋", "⚋", "⚋"] },    
-      { number: 13, name: "천화동인", symbols: ["⚊", "⚊", "⚊", "⚊", "⚋", "⚊"] },   
-      { number: 14, name: "화천대유", symbols: ["⚊", "⚋", "⚊", "⚊", "⚊", "⚊"] },     
-      { number: 15, name: "지산겸", symbols: ["⚋", "⚋", "⚋", "⚊", "⚋", "⚋"] },      
-      { number: 16, name: "뇌지예", symbols: ["⚋", "⚋", "⚊", "⚋", "⚋", "⚋"] },     
-      { number: 17, name: "택뢰수", symbols: ["⚋", "⚊", "⚊", "⚋", "⚋", "⚊"] },       
-      { number: 18, name: "산풍고", symbols: ["⚊", "⚋", "⚋", "⚊", "⚊", "⚋"] },        
-      { number: 19, name: "지택림", symbols: ["⚋", "⚋", "⚋", "⚋", "⚊", "⚊"] },       
-      { number: 20, name: "풍지관", symbols: ["⚊", "⚊", "⚋", "⚋", "⚋", "⚋"] },         
-      { number: 21, name: "화뢰서합", symbols: ["⚊", "⚋", "⚊", "⚋", "⚋", "⚊"] },       
-      { number: 22, name: "산화비", symbols: ["⚊", "⚋", "⚋", "⚊", "⚋", "⚊"] },      
-      { number: 23, name: "산지박", symbols: ["⚊", "⚋", "⚋", "⚋", "⚋", "⚋"] },       
-      { number: 24, name: "지뢰복", symbols: ["⚋", "⚋", "⚋", "⚋", "⚋", "⚊"] },        
-      { number: 25, name: "천뢰무망", symbols: ["⚊", "⚊", "⚊", "⚋", "⚋", "⚊"] },     
-      { number: 26, name: "산천대축", symbols: ["⚊", "⚋", "⚋", "⚊", "⚊", "⚊"] },     
-      { number: 27, name: "산뢰이", symbols: ["⚊", "⚋", "⚋", "⚋", "⚋", "⚊"] },       
-      { number: 28, name: "택풍대과", symbols: ["⚋", "⚊", "⚊", "⚊", "⚊", "⚋"] },     
-      { number: 29, name: "중수감", symbols: ["⚋", "⚊", "⚋", "⚋", "⚊", "⚋"] },     
-      { number: 30, name: "중화리", symbols: ["⚊", "⚋", "⚊", "⚊", "⚋", "⚊"] },     
-      { number: 31, name: "택산함", symbols: ["⚋", "⚊", "⚊", "⚊", "⚋", "⚋"] },    
-      { number: 32, name: "뇌풍항", symbols: ["⚋", "⚋", "⚊", "⚊", "⚊", "⚋"] },    
-      { number: 33, name: "천산돈", symbols: ["⚊", "⚊", "⚊", "⚊", "⚋", "⚋"] },     
-      { number: 34, name: "뇌천대장", symbols: ["⚋", "⚋", "⚊", "⚊", "⚊", "⚊"] },      
-      { number: 35, name: "화지진", symbols: ["⚊", "⚋", "⚊", "⚋", "⚋", "⚋"] },     
-      { number: 36, name: "지화명", symbols: ["⚋", "⚋", "⚋", "⚊", "⚋", "⚊"] },     
-      { number: 37, name: "풍화가인", symbols: ["⚊", "⚊", "⚋", "⚊", "⚋", "⚊"] },      
-      { number: 38, name: "화택규", symbols: ["⚊", "⚋", "⚊", "⚋", "⚊", "⚊"] },     
-      { number: 39, name: "수산건", symbols: ["⚋", "⚊", "⚋", "⚊", "⚋", "⚋"] },     
-      { number: 40, name: "뇌수해", symbols: ["⚋", "⚋", "⚊", "⚋", "⚊", "⚋"] },     
-      { number: 41, name: "산택손", symbols: ["⚊", "⚋", "⚋", "⚋", "⚊", "⚊"] },
-      { number: 42, name: "풍뢰익", symbols: ["⚊", "⚊", "⚋", "⚋", "⚋", "⚊"] },
-      { number: 43, name: "택천쾌", symbols: ["⚋", "⚊", "⚊", "⚊", "⚊", "⚊"] },
-      { number: 44, name: "천풍구", symbols: ["⚊", "⚊", "⚊", "⚊", "⚊", "⚋"] },
-      { number: 45, name: "택지췌", symbols: ["⚋", "⚊", "⚊", "⚋", "⚋", "⚋"] },
-      { number: 46, name: "지풍승", symbols: ["⚋", "⚋", "⚋", "⚊", "⚊", "⚋"] },
-      { number: 47, name: "택수곤", symbols: ["⚋", "⚊", "⚊", "⚋", "⚊", "⚋"] },
-      { number: 48, name: "수풍정", symbols: ["⚋", "⚊", "⚋", "⚊", "⚊", "⚋"] },
-      { number: 49, name: "택화혁", symbols: ["⚋", "⚊", "⚊", "⚊", "⚋", "⚊"] },
-      { number: 50, name: "화풍정", symbols: ["⚊", "⚋", "⚊", "⚊", "⚊", "⚋"] },
-      { number: 51, name: "중뢰진", symbols: ["⚋", "⚋", "⚊", "⚋", "⚋", "⚊"] },
-      { number: 52, name: "중산간", symbols: ["⚊", "⚋", "⚋", "⚊", "⚋", "⚋"] },
-      { number: 53, name: "풍산점", symbols: ["⚊", "⚊", "⚋", "⚊", "⚋", "⚋"] },
-      { number: 54, name: "뇌택귀매", symbols: ["⚋", "⚋", "⚊", "⚋", "⚊", "⚊"] },
-      { number: 55, name: "뇌화풍", symbols: ["⚋", "⚋", "⚊", "⚊", "⚋", "⚊"] },
-      { number: 56, name: "화산려", symbols: ["⚊", "⚋", "⚊", "⚊", "⚋", "⚋"] },
-      { number: 57, name: "중풍손", symbols: ["⚊", "⚊", "⚋", "⚊", "⚊", "⚋"] },
-      { number: 58, name: "중택태", symbols: ["⚋", "⚊", "⚊", "⚋", "⚊", "⚊"] },
-      { number: 59, name: "풍수환", symbols: ["⚊", "⚊", "⚋", "⚋", "⚊", "⚋"] },
-      { number: 60, name: "수택절", symbols: ["⚋", "⚊", "⚋", "⚋", "⚊", "⚊"] },
-      { number: 61, name: "풍택중부", symbols: ["⚊", "⚊", "⚋", "⚋", "⚊", "⚊"] },
-      { number: 62, name: "뇌산소과", symbols: ["⚋", "⚋", "⚊", "⚊", "⚋", "⚋"] },
-      { number: 63, name: "수화기제", symbols: ["⚋", "⚊", "⚋", "⚊", "⚋", "⚊"] },
-      { number: 64, name: "화수미제", symbols: ["⚊", "⚋", "⚊", "⚋", "⚊", "⚋"] }
+      { number: 1, name: "중천건", keyword: "창조·시작·강함", symbols: ["⚊","⚊","⚊","⚊","⚊","⚊"] },
+      { number: 2, name: "중지곤", keyword: "순응·수용·부드러움", symbols: ["⚋","⚋","⚋","⚋","⚋","⚋"] },
+      { number: 3, name: "수뢰둔", keyword: "준비·지연·인내", symbols: ["⚋","⚊","⚋","⚋","⚋","⚊"] },
+      { number: 4, name: "산수몽", keyword: "미숙·가르침·성장", symbols: ["⚊","⚋","⚋","⚋","⚊","⚋"] },
+      { number: 5, name: "수천수", keyword: "기다림·믿음·신뢰", symbols: ["⚋","⚊","⚋","⚊","⚊","⚊"] },
+      { number: 6, name: "천수송", keyword: "갈등·판단·소송", symbols: ["⚊","⚊","⚊","⚋","⚊","⚋"] },
+      { number: 7, name: "지수사", keyword: "조직·훈련·준비", symbols: ["⚋","⚋","⚋","⚋","⚊","⚋"] },
+      { number: 8, name: "수지비", keyword: "연합·친화·화합", symbols: ["⚋","⚊","⚋","⚋","⚋","⚋"] },
+      { number: 9, name: "풍천소축", keyword: "절제·자제·조심", symbols: ["⚊","⚊","⚋","⚊","⚊","⚊"] },
+      { number: 10, name: "천택리", keyword: "품격·예절·조화", symbols: ["⚊","⚊","⚊","⚋","⚊","⚊"] },
+      { number: 11, name: "지천태", keyword: "평화·조화·상생", symbols: ["⚋","⚋","⚋","⚊","⚊","⚊"] },
+      { number: 12, name: "천지비", keyword: "단절·불화·정체", symbols: ["⚊","⚊","⚊","⚋","⚋","⚋"] },
+      { number: 13, name: "천화동인", keyword: "협력·유대·공감", symbols: ["⚊","⚊","⚊","⚊","⚋","⚊"] },
+      { number: 14, name: "화천대유", keyword: "성공·영광·풍요", symbols: ["⚊","⚋","⚊","⚊","⚊","⚊"] }
+      { number: 15, name: "지산겸", keyword: "겸손·조화·성실", symbols: ["⚋","⚋","⚋","⚊","⚋","⚋"] },
+      { number: 16, name: "뇌지예", keyword: "기쁨·계획·축하", symbols: ["⚋","⚋","⚊","⚋","⚋","⚋"] },
+      { number: 17, name: "택뢰수", keyword: "순종·따름·신뢰", symbols: ["⚋","⚊","⚊","⚋","⚋","⚊"] },
+      { number: 18, name: "산풍고", keyword: "개혁·정화·치유", symbols: ["⚊","⚋","⚋","⚊","⚊","⚋"] },
+      { number: 19, name: "지택림", keyword: "접근·관심·기회", symbols: ["⚋","⚋","⚋","⚋","⚊","⚊"] },
+      { number: 20, name: "풍지관", keyword: "관찰·성찰·통찰", symbols: ["⚊","⚊","⚋","⚋","⚋","⚋"] },
+      { number: 21, name: "화뢰서합", keyword: "통제·단결·정의", symbols: ["⚊","⚋","⚊","⚋","⚋","⚊"] },
+      { number: 22, name: "산화비", keyword: "미·품격·예술", symbols: ["⚊","⚋","⚋","⚊","⚋","⚊"] },
+      { number: 23, name: "산지박", keyword: "쇠퇴·손실·정체", symbols: ["⚊","⚋","⚋","⚋","⚋","⚋"] },
+      { number: 24, name: "지뢰복", keyword: "회복·재생·귀환", symbols: ["⚋","⚋","⚋","⚋","⚋","⚊"] },
+      { number: 25, name: "천뢰무망", keyword: "순수·진심·정직", symbols: ["⚊","⚊","⚊","⚋","⚋","⚊"] },
+      { number: 26, name: "산천대축", keyword: "자제·통제·성숙", symbols: ["⚊","⚋","⚋","⚊","⚊","⚊"] },
+      { number: 27, name: "산뢰이", keyword: "영양·보호·자양", symbols: ["⚊","⚋","⚋","⚋","⚋","⚊"] },
+      { number: 28, name: "택풍대과", keyword: "부담·중책·강행", symbols: ["⚋","⚊","⚊","⚊","⚊","⚋"] },
+      { number: 29, name: "중수감", keyword: "위험·시험·도전", symbols: ["⚋","⚊","⚋","⚋","⚊","⚋"] },
+      { number: 30, name: "중화리", keyword: "빛·명예·명확", symbols: ["⚊","⚋","⚊","⚊","⚋","⚊"] },
+      { number: 31, name: "택산함", keyword: "매력·감응·연애", symbols: ["⚋","⚊","⚊","⚊","⚋","⚋"] },
+      { number: 32, name: "뇌풍항", keyword: "지속·신념·확고", symbols: ["⚋","⚋","⚊","⚊","⚊","⚋"] },
+      { number: 33, name: "천산돈", keyword: "퇴각·보류·재정비", symbols: ["⚊","⚊","⚊","⚊","⚋","⚋"] },
+      { number: 34, name: "뇌천대장", keyword: "힘·결단·진취", symbols: ["⚋","⚋","⚊","⚊","⚊","⚊"] },
+      { number: 35, name: "화지진", keyword: "진보·발전·성장", symbols: ["⚊","⚋","⚊","⚋","⚋","⚋"] },
+      { number: 36, name: "지화명", keyword: "은둔·숨김·위험", symbols: ["⚋","⚋","⚋","⚊","⚋","⚊"] },
+      { number: 37, name: "풍화가인", keyword: "가정·화합·질서", symbols: ["⚊","⚊","⚋","⚊","⚋","⚊"] },
+      { number: 38, name: "화택규", keyword: "불화·대립·구별", symbols: ["⚊","⚋","⚊","⚋","⚊","⚊"] },
+      { number: 39, name: "수산건", keyword: "난관·시련·지혜", symbols: ["⚋","⚊","⚋","⚊","⚋","⚋"] },
+      { number: 40, name: "뇌수해", keyword: "해방·자유·기회", symbols: ["⚋","⚋","⚊","⚋","⚊","⚋"] },
+      { number: 41, name: "산택손", keyword: "감소·절제·겸양", symbols: ["⚊","⚋","⚋","⚋","⚊","⚊"] },
+      { number: 42, name: "풍뢰익", keyword: "성장·이익·증진", symbols: ["⚊","⚊","⚋","⚋","⚋","⚊"] },
+      { number: 43, name: "택천쾌", keyword: "결단·공개·정의", symbols: ["⚋","⚊","⚊","⚊","⚊","⚊"] },
+      { number: 44, name: "천풍구", keyword: "경계·유혹·조심", symbols: ["⚊","⚊","⚊","⚊","⚊","⚋"] },
+      { number: 45, name: "택지췌", keyword: "모임·집중·단결", symbols: ["⚋","⚊","⚊","⚋","⚋","⚋"] },
+      { number: 46, name: "지풍승", keyword: "발전·승진·상승", symbols: ["⚋","⚋","⚋","⚊","⚊","⚋"] },
+      { number: 47, name: "택수곤", keyword: "고난·인내·정체", symbols: ["⚋","⚊","⚊","⚋","⚊","⚋"] },
+      { number: 48, name: "수풍정", keyword: "정비·관리·근본", symbols: ["⚋","⚊","⚋","⚊","⚊","⚋"] },
+      { number: 49, name: "택화혁", keyword: "변혁·개선·혁신", symbols: ["⚋","⚊","⚊","⚊","⚋","⚊"] },
+      { number: 50, name: "화풍정", keyword: "조화·정상화·유지", symbols: ["⚊","⚋","⚊","⚊","⚊","⚋"] },
+      { number: 51, name: "중뢰진", keyword: "충격·자극·깨달음", symbols: ["⚋","⚋","⚊","⚋","⚋","⚊"] },
+      { number: 52, name: "중산간", keyword: "멈춤·명상·평정", symbols: ["⚊","⚋","⚋","⚊","⚋","⚋"] },
+      { number: 53, name: "풍산점", keyword: "점진·성숙·성장", symbols: ["⚊","⚊","⚋","⚊","⚋","⚋"] },
+      { number: 54, name: "뇌택귀매", keyword: "결합·인연·연애", symbols: ["⚋","⚋","⚊","⚋","⚊","⚊"] },
+      { number: 55, name: "뇌화풍", keyword: "활력·기운·열정", symbols: ["⚋","⚋","⚊","⚊","⚋","⚊"] },
+      { number: 56, name: "화산려", keyword: "여행·이동·진행", symbols: ["⚊","⚋","⚊","⚊","⚋","⚋"] },
+      { number: 57, name: "중풍손", keyword: "순응·겸손·조화", symbols: ["⚊","⚊","⚋","⚊","⚊","⚋"] },
+      { number: 58, name: "중택태", keyword: "즐거움·소통·유대", symbols: ["⚋","⚊","⚊","⚋","⚊","⚊"] },
+      { number: 59, name: "풍수환", keyword: "해소·용해·분리", symbols: ["⚊","⚊","⚋","⚋","⚊","⚋"] },
+      { number: 60, name: "수택절", keyword: "제한·질서·규율", symbols: ["⚋","⚊","⚋","⚋","⚊","⚊"] },
+      { number: 61, name: "풍택중부", keyword: "진실·성실·중용", symbols: ["⚊","⚊","⚋","⚋","⚊","⚊"] },
+      { number: 62, name: "뇌산소과", keyword: "과잉·조심·겸손", symbols: ["⚋","⚋","⚊","⚊","⚋","⚋"] },
+      { number: 63, name: "수화기제", keyword: "성취·완성·종결", symbols: ["⚋","⚊","⚋","⚊","⚋","⚊"] },
+      { number: 64, name: "화수미제", keyword: "미완·진행·시작", symbols: ["⚊","⚋","⚊","⚋","⚊","⚋"] }
     ];
 
     const drawBtn = document.getElementById("drawBtn");
@@ -172,20 +201,6 @@
       guaListEl.innerHTML = "";
 
       const question = questionInput.value.trim();
-
-      if (gua64.length < 2) {
-        guaListEl.innerHTML = "<li>괘가 2개 이상 있어야 합니다.</li>";
-        return;
-      }
-
-      // 중복 없이 2개 괘 뽑기
-      const indices = new Set();
-      while (indices.size < 2) {
-        const idx = Math.floor(Math.random() * gua64.length);
-        indices.add(idx);
-      }
-
-      // 질문 출력
       if (question) {
         const questionLi = document.createElement("li");
         questionLi.style.fontWeight = "bold";
@@ -196,7 +211,13 @@
         guaListEl.appendChild(questionLi);
       }
 
-      // 괘 2개 출력
+      // 2괘 랜덤 뽑기
+      const indices = new Set();
+      while (indices.size < 2) {
+        const idx = Math.floor(Math.random() * gua64.length);
+        indices.add(idx);
+      }
+
       indices.forEach(i => {
         const gua = gua64[i];
         const guaDiv = document.createElement("li");
@@ -209,22 +230,34 @@
 
         const symbolsDiv = document.createElement("div");
         symbolsDiv.className = "symbols";
-
         gua.symbols.forEach(symbol => {
           const line = document.createElement("div");
           line.textContent = symbol;
           symbolsDiv.appendChild(line);
         });
-
         guaDiv.appendChild(symbolsDiv);
+
+        const keyword = document.createElement("div");
+        keyword.className = "guaKeyword";
+        keyword.textContent = gua.keyword;
+        guaDiv.appendChild(keyword);
+
+        // 클릭 시 키워드 토글
+        guaDiv.addEventListener("click", () => {
+          keyword.style.display = keyword.style.display === "block" ? "none" : "block";
+        });
+
         guaListEl.appendChild(guaDiv);
       });
     });
   </script>
-  
-    <div class="footer">
-        <p>✨ 제작: 연유🌱</p>
-    </div>
-  
+
+  <div class="footer">
+    © 2025 Studio Y.Green. All Rights Reserved.<br>
+    본 페이지의 HTML, CSS, JavaScript 코드는 Studio Y.Green의 창작물로 저작권법의 보호를 받습니다.<br>
+    무단 복제, 배포, 코드 변형 및 상업적 이용을 금합니다.<br>
+    <small style="color:#000;">✨ 제작 : 연유🌱</small>
+  </div>
 </body>
 </html>
+

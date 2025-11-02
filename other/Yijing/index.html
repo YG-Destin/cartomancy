@@ -97,16 +97,15 @@
     }
 
     .symbols {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;           /* 기존 8px → 2px */
-      font-size: clamp(55px, 6vw, 100px); /* 살짝 줄여서 더 단정하게 */
-      line-height: 0.3;  /* 줄 간격을 살짝 좁혀서 균형감 있게 */
-      user-select: none;
-      text-align: center;
-      white-space: nowrap;
-    }
-
+     display: flex;
+     flex-direction: column;
+     gap: 0;                /* 간격 완전 제거 */
+     font-size: clamp(50px, 5vw, 90px); /* 브라우저 폭 좁을 때도 안깨짐 */
+     line-height: 0.1;     
+     user-select: none;
+     text-align: center;
+     white-space: nowrap;
+}
 
     .footer {
       margin-top: 40px;

@@ -13,7 +13,19 @@
     padding: 20px;
   }
   h1 {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
+  }
+  .question-input {
+    font-size: 16px;
+    padding: 8px;
+    width: 80%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+  .question-display {
+    margin-bottom: 25px;
+    font-size: 17px;
+    color: #444;
   }
   .rune-grid {
     display: flex;
@@ -32,8 +44,9 @@
     justify-content: center;
     align-items: center;
     font-size: 50px;
-    transition: transform 0.3s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.3s ease;
   }
   .rune-card:hover {
     transform: translateY(-5px);
@@ -42,6 +55,13 @@
     font-size: 16px;
     color: #222;
     margin-top: 10px;
+  }
+  .rune-meaning {
+    display: none;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+    padding: 0 10px;
   }
   .reverse {
     transform: rotate(180deg);
@@ -68,6 +88,10 @@
 </head>
 <body>
 <h1>Rune</h1>
+
+<input type="text" id="question-input" class="question-input" placeholder="당신의 질문을 입력하세요">
+<div id="question-display" class="question-display"></div>
+
 <div id="rune-container" class="rune-grid"></div>
 <button onclick="drawRunes()">새로운 룬 받기</button>
 
@@ -109,8 +133,13 @@ const runes = [
 
 function drawRunes() {
   const container = document.getElementById("rune-container");
-  container.innerHTML = "";
+  const questionInput = document.getElementById("question-input");
+  const questionDisplay = document.getElementById("question-display");
 
+  questionDisplay.textContent = questionInput.value ? `당신의 질문: ${questionInput.value}` : "";
+  questionInput.value = "";
+
+  container.innerHTML = "";
   const picked = [];
   while (picked.length < 3) {
     const rune = runes[Math.floor(Math.random() * runes.length)];
@@ -125,6 +154,10 @@ function drawRunes() {
 
     const card = document.createElement("div");
     card.className = "rune-card";
+    card.onclick = () => {
+      const meaningDiv = card.querySelector(".rune-meaning");
+      meaningDiv.style.display = meaningDiv.style.display === "block" ? "none" : "block";
+    };
 
     const symbol = document.createElement("div");
     symbol.innerText = runeSymbol;
@@ -134,12 +167,21 @@ function drawRunes() {
     name.className = "rune-name";
     name.innerText = runeName;
 
+    const meaningDiv = document.createElement("div");
+    meaningDiv.className = "rune-meaning";
+    meaningDiv.innerHTML = meaning;
+
     card.appendChild(symbol);
     card.appendChild(name);
-    card.title = meaning; // 마우스 오버 시 의미 표시
+    card.appendChild(meaningDiv);
 
     container.appendChild(card);
   });
+}
+</script>
+</body>
+</html>
+
 }
 </script>
 </body>

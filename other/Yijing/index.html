@@ -99,13 +99,14 @@
     .symbols {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      font-size: clamp(60px, 8vw, 120px);
-      line-height: 1;
+      gap: 2px;           /* 기존 8px → 2px */
+      font-size: clamp(55px, 6vw, 100px); /* 살짝 줄여서 더 단정하게 */
+      line-height: 0.85;  /* 줄 간격을 살짝 좁혀서 균형감 있게 */
       user-select: none;
       text-align: center;
       white-space: nowrap;
     }
+
 
     .footer {
       margin-top: 40px;

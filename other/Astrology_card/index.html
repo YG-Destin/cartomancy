@@ -86,7 +86,6 @@
   <input type="text" id="question" placeholder="질문을 입력하세요">
   <br>
   <button onclick="generateRandomSelection()">뽑기</button>
-<<<<<<< HEAD
 
   <div id="result-container">
     <div class="card" id="house-card">?</div>
@@ -99,89 +98,6 @@
     본 페이지의 HTML, CSS, JavaScript 코드는 <b>Studio Y.Green</b>의 창작물로 저작권법의 보호를 받습니다.<br>
     무단 복제, 배포, 코드 변형 및 상업적 이용을 금합니다.<br>
     <small style="color:#fff;">✨ 웹페이지 제작 : 연유🌱</small>
-  </div>
-
-  <script>
-    const houses = [
-      ["①", "자아, 외모, 태도"],
-      ["②", "자원, 재정, 가치"],
-      ["③", "학습, 형제, 소통"],
-      ["④", "가정, 뿌리, 내면"],
-      ["⑤", "창의, 연애, 자녀"],
-      ["⑥", "일상, 건강, 봉사"],
-      ["⑦", "파트너, 관계, 계약"],
-      ["⑧", "변화, 성, 공유자원"],
-      ["⑨", "철학, 여행, 진리"],
-      ["⑩", "사회적 지위, 직업"],
-      ["⑪", "친구, 네트워크, 희망"],
-      ["⑫", "무의식, 은둔, 영성"]
-    ];
-
-    const signs = [
-      ["♈", "시작, 용기, 추진력"],
-      ["♉", "안정, 물질, 감각"],
-      ["♊", "지식, 소통, 교류"],
-      ["♋", "가정, 감정, 보호"],
-      ["♌", "창의, 자존심, 표현"],
-      ["♍", "분석, 정리, 봉사"],
-      ["♎", "균형, 관계, 조화"],
-      ["♏", "열정, 깊이, 변형"],
-      ["♐", "탐험, 진리, 철학"],
-      ["♑", "목표, 규율, 성취"],
-      ["♒", "혁신, 집단, 자유"],
-      ["♓", "영감, 희생, 무의식"]
-    ];
-
-    const planets = [
-      ["☉", "자아, 생명력, 의식"],
-      ["☽", "감정, 습관, 본능"],
-      ["☿", "사고, 소통, 학습"],
-      ["♀", "사랑, 미, 가치"],
-      ["♂", "행동, 에너지, 욕망"],
-      ["♃", "성장, 확장, 행운"],
-      ["♄", "책임, 한계, 구조"],
-      ["♅", "혁신, 변화, 독립"],
-      ["♆", "꿈, 영감, 무의식"],
-      ["♇", "권력, 변형, 심연"],
-      ["☊", "운명적 과제, 성장"],
-      ["☋", "익숙한 과거, 습관"]
-    ];
-
-    function generateRandomSelection() {
-      const randomHouse = houses[Math.floor(Math.random() * houses.length)];
-      const randomSign = signs[Math.floor(Math.random() * signs.length)];
-      const randomPlanet = planets[Math.floor(Math.random() * planets.length)];
-
-      createCard("house-card", randomHouse);
-      createCard("sign-card", randomSign);
-      createCard("planet-card", randomPlanet);
-    }
-
-    function createCard(id, data) {
-      const card = document.getElementById(id);
-      card.innerHTML = data[0];
-      
-      let meaning = card.querySelector(".meaning");
-      if (!meaning) {
-        meaning = document.createElement("div");
-        meaning.className = "meaning";
-        meaning.textContent = data[1];
-        card.appendChild(meaning);
-      } else {
-        meaning.textContent = data[1];
-      }
-
-      card.onclick = () => {
-        meaning.style.display = meaning.style.display === "block" ? "none" : "block";
-      };
-    }
-  </script>
-=======
-
-  <div id="result-container">
-    <div class="card" id="house-card">?</div>
-    <div class="card" id="sign-card">?</div>
-    <div class="card" id="planet-card">?</div>
   </div>
 
   <script>

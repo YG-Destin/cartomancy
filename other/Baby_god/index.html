@@ -24,7 +24,6 @@
     }
 
     .grid {
-      display: grid;
       gap: 10px;
       justify-content: center;
       margin: 20px;
@@ -132,7 +131,7 @@
   </div>
 
   <script>
-    const imagePaths = Array.from({ length: 31 }, (_, i) => `cards/${(i + 1).toString().padStart(2, '0')}.JPG`);
+    const imagePaths = Array.from({ length: 31 }, (_, i) => `cards/${(i + 1).toString().padStart(2, '0')}.jpg`);
     const meanings = [
       "잔 두 개 : 긍정 / 마음이 통함, 축배를 들다, 마음에 듦",
       "빠른 운석 : 긍정 or 중립 / 쾌속 진행, 상승세, 바쁨, 분주함",
@@ -192,7 +191,7 @@
 
         const meaningBox = document.createElement("div");
         meaningBox.className = "meaning";
-        meaningBox.textContent = meanings[index] || ;
+        meaningBox.textContent = meanings[index] ;
 
         img.addEventListener("click", () => {
           meaningBox.style.display =
